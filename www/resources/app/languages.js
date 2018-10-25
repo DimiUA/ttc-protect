@@ -142,7 +142,7 @@ window.LanguagePackages= {
 		"ALARM_MSG06": "Tilt / Shock",
 		"ALARM_MSG07": "Impact / Crash",
 		"ALARM_MSG08": "Power Disconnection",
-		"ALARM_MSG09": "Input",
+		"ALARM_MSG09": "Alarm Input",
 
 		"ADD_EDIT_MSG00": "Information",
 		"ADD_EDIT_MSG01": "Asset Name",		
