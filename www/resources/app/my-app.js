@@ -5,11 +5,11 @@ window.NULL = null;
 $hub = null;
 var localPushLastPayload = null;
 window.COM_TIMEFORMAT = 'YYYY-MM-DD HH:mm:ss';
-function setUserinfo(user){localStorage.setItem("COM.QUIKTRAK.LIVE.USERINFO", JSON.stringify(user));}
-function getUserinfo(){var ret = {};var str = localStorage.getItem("COM.QUIKTRAK.LIVE.USERINFO");if(str) {ret = JSON.parse(str);} return ret;}
+function setUserinfo(user){localStorage.setItem("COM.QUIKTRAK.LIVE.USERINFO", JSON.stringify(user));};
+function getUserinfo(){var ret = {};var str = localStorage.getItem("COM.QUIKTRAK.LIVE.USERINFO");if(str) {ret = JSON.parse(str);} return ret;};
 function isJsonString(str){try{var ret=JSON.parse(str);}catch(e){return false;}return ret;}
-function toTitleCase(str){return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-}
+function toTitleCase(str){return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});}
+
 function guid() {
   function S4() {
     return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
@@ -60,6 +60,7 @@ function onDeviceReady(){
     if (window.MobileAccessibility) {
         window.MobileAccessibility.usePreferredTextZoom(false);    
     }
+
     if (StatusBar) {
         StatusBar.styleDefault();
     } 
@@ -139,37 +140,16 @@ function setupPush(){
                         setTimeout(function(){
                             //alert('before processClickOnPushNotification');
                             processClickOnPushNotification([data.additionalData.payload]);
-                            App.hideIndicator();
+                            App.hideIndicator();     
                         },1000); 
                     }
                 }, 1000); 
             }
-            if (device && device.platform && device.platform.toLowerCase() == 'ios') {
-                push.finish(
-                    () => {
-                      console.log('processing of push data is finished');
-                    },
-                    () => {
-                      console.log(
-                        'something went wrong with push.finish for ID =',
-                        data.additionalData.notId
-                      );
-                    },
-                    data.additionalData.notId
-                );
-            }
-                
         });
 
+ 
         if　(!localStorage.ACCOUNT){
-            push.clearAllNotifications(
-                () => {
-                  console.log('success');
-                },
-                () => {
-                  console.log('error');
-                }
-            );
+            push.clearAllNotifications();
         }
 }
 
@@ -201,24 +181,27 @@ function backFix(event){
 
 
 
-  
 
 //clear all push messag plus.push.clear();
 //get all push message plus.push.getAllMessage();
 //new_not
 
 // Initialize your app
-var App = new Framework7({   
-    material:true,
-    //pushState: true,
-    sortable: false,         
+var App = new Framework7({      
+    animateNavBackIcon: true,
+    //pushState: true, 
+    //allowDuplicateUrls: true,    
     modalTitle: 'TTC Protect',
-    swipeout: true,   
-    //swipePanel: 'left',
+    notificationTitle: 'TTC Protect',
+    swipeout: true, 
+    swipePanel: 'left',    
     swipeBackPage: false,
     precompileTemplates: true,
-    template7Pages: true,    
-   
+    template7Pages: true,
+    sortable: false,
+    template7Data: {
+        
+    },
     onAjaxStart: function(xhr){
         App.showIndicator();
     },
@@ -235,12 +218,14 @@ var $$ = Dom7;
 // Add view
 var mainView = App.addView('.view-main', {
     domCache: true,  
+    dynamicNavbar: true,
 });
 
 
 
 
 
+//window.MapTrack = Helper.createMap({ target: 'map', latLng: [0, 0], zoom: 17 });
 var MapTrack = null;
 window.PosMarker = {};
 window.TargetAsset = {};
@@ -249,10 +234,7 @@ var searchbar = null;
 var statusCommand = 1;
 var virtualAssetList = null;
 var verifyCheck = {}; // for password reset
-var URL_REGISTRATION = "http://app.quikprotect.co/activation/register?";
-var PAYPAL_URL = {};
-PAYPAL_URL.UPGRADELINK1 = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=GG4ZG85S8FTQY";  //REAL subscription link
-PAYPAL_URL.UPGRADELINK2 = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=AV6QKES3QVQYJ";     // REAL subscription link
+
 
 var API_DOMIAN1 = "http://api.m2mglobaltech.com/QuikProtect/V1/Client/";
 var API_DOMIAN2 = "http://quiktrak.co/webapp/QuikProtect/Api2/";
@@ -262,14 +244,14 @@ API_URL.URL_GET_LOGIN = API_DOMIAN1 + "Auth?account={0}&password={1}&appKey={2}&
 API_URL.URL_GET_LOGOUT = API_DOMIAN1 + "Logoff?MinorToken={0}&deviceToken={1}&mobileToken={2}";
 API_URL.URL_EDIT_ASSET = API_DOMIAN1 + "AssetEdit?MajorToken={0}&MinorToken={1}&imei={2}&name={3}&describe1={4}&describe2={5}&describe3={6}&describe4={7}&alias&photo";
 API_URL.URL_ADD_ASSET = API_DOMIAN1 + "Activation?MajorToken={0}&MinorToken={1}&imei={2}&name={3}&describe1={4}&describe2={5}&describe3={6}&describe4={7}";
-
-//API_URL.URL_SET_ALARM = API_DOMIAN1 + "AlarmOptions?MajorToken={0}&MinorToken={1}&imei={2}&geolock={3}&shock={4}&crash={5}&power={6}";
-//API_URL.URL_SET_ALARM = API_DOMIAN1 + "AlarmOptions?&imei={0}&geolock={1}&shock={2}&crash={3}&power={4}";
+//API_URL.URL_SET_ALARM = API_DOMIAN1 + "AlarmOptions?MajorToken={0}&MinorToken={1}&imei={2}&bilge=false&ignition=false&power={3}&geolock={4}&shock={5}&crash={6}";
 API_URL.URL_SET_ALARM = API_DOMIAN1 + "AlarmOptions2?MajorToken={0}&MinorToken={1}&imeis={2}&alarmOptions={3}";
 
 API_URL.URL_EDIT_ACCOUNT = API_DOMIAN1 + "AccountEdit?MajorToken={0}&MinorToken={1}&firstName={2}&surName={3}&mobile={4}&email={5}&address0={6}&address1={7}&address2={8}&address3={9}&address4={10}";
 API_URL.URL_NEW_PASSWORD = API_DOMIAN3 + "User/Password?MinorToken={0}&oldpwd={1}&newpwd={2}";
+//API_URL.URL_SEND_COM_POS = API_DOMIAN2 + "SendPosCommand.json?code={0}&imei={1}&timeZone={2}";
 API_URL.URL_SEND_COM_POS = API_DOMIAN2 + "SendPosCommand2.json?code={0}&imei={1}&timeZone={2}";
+//API_URL.URL_SEND_COM_STATUS = API_DOMIAN2 + "SendStatusCommand.json?code={0}&imei={1}";
 API_URL.URL_SEND_COM_STATUS = API_DOMIAN2 + "SendStatusCommand2.json?code={0}&imei={1}";
 //API_URL.URL_SET_GEOLOCK = API_DOMIAN1 + "SetGeoLock?MajorToken={0}&MinorToken={1}&imei={2}&state={3}";
 API_URL.URL_SET_GEOLOCK = API_DOMIAN1 + "setGeolock?MajorToken={0}&MinorToken={1}&imei={2}&state={3}";
@@ -286,6 +268,7 @@ API_URL.URL_SUPPORT = "http://support.quiktrak.eu/?name={0}&loginName={1}&email=
 
 API_URL.URL_ROUTE = "https://www.google.com/maps/dir/?api=1&destination={0},{1}"; //&travelmode=walking
 API_URL.URL_REFRESH_TOKEN = API_DOMIAN3 + "User/RefreshToken";
+
 
 
 var cameraButtons = [
@@ -318,20 +301,22 @@ $$(document.body).append(html);
 //App.loginScreen();
 html = Template7.templates.template_Popover_Menu();
 $$(document.body).append(html);
-html = Template7.templates.template_AssetList();
-$$('.navbar-fixed').append(html);
-/*html = Template7.templates.template_Popover_Notification();
-$$(document.body).append(html);*/
+/*html = Template7.templates.template_AssetList();
+$$('.view-main').prepend(html);*/
+$$('.index-title').html(LANGUAGE.MENU_MSG00);
+$$('.index-search-input').attr('placeholder',LANGUAGE.COM_MSG06);
+$$('.index-search-cancel').html(LANGUAGE.COM_MSG04);
+$$('.index-search-nothing-found').html(LANGUAGE.COM_MSG05);
 
 if (inBrowser) {
     if(localStorage.ACCOUNT && localStorage.PASSWORD) {
+        //login();    
         preLogin();
     }
     else {
         logout();
     } 
 }
-
 
 
 var virtualAssetList = App.virtualList('.assets_list', {
@@ -348,7 +333,7 @@ var virtualAssetList = App.virtualList('.assets_list', {
     //List of array items
     items: [
     ],
-    height: 88,
+    height: 77,
     // Display the each item using Template7 template parameter
     template: '<li class="item-link item-content item_asset" data-id="{{IMEI}}">' +                
                   '<div class="item-media">{{#if AppPhoto}}<img src="{{AppPhoto}}" alt="">{{else}}<img src="resources/images/svg_asset.svg" alt="">{{/if}} </div>' +
@@ -382,18 +367,16 @@ $$('.login-form').on('submit', function (e) {
     preLogin();
     return false;
 });
-
 $$('body').on('click', '#account, #password', function(e){  
     setTimeout(function(){      
         $('.login-screen-content').scrollTop(200);
     },1000);    
 });
-
 $$('.forgetPwd').on('click', function(){
     App.closeModal();
 });
 
-$$('body').on('click', '.notification_button', function(e){    
+$$('body').on('click', '.notification_button', function(e){
     getNewNotifications({'loadPageNotification':true}); 
     $$('.notification_button').removeClass('new_not');
 });
@@ -407,14 +390,6 @@ $$('body').on('click', '.deleteAllNotifications', function(){
         });
     });
 });
-$$('.button_search').on('click', function(){        
-    /*$('.searchbar').slideDown(400, function(){
-        $$('.searchbar input').focus();
-    });  */   
-    //$$('.searchbar').removeClass('fadeOutUp');
-    $$('.searchbar').addClass('fadeInDown').show();     
-    $$('.searchbar input').focus();
-}); 
 
 $$('body').on('click', '.routeButton', function(){
     var that = $$(this);
@@ -435,6 +410,33 @@ $$('body').on('click', '.routeButton', function(){
     }
     
 });
+/*$$('.button_search').on('click', function(){        
+    $('.searchbar').slideDown(400, function(){
+        $$('.searchbar input').focus();
+    });                
+}); 
+*/
+
+/*$$('body').on('click', '.index-title', function(){
+    //var payload = {};
+    //console.log('')
+    var payload = {
+        "type":"sms_received",
+        "alarm":"location",
+        "imsi":"43688875284305",
+        "AssetName":"Jack Da Roo",
+        "imei":"0352544071889449",
+        "messageReference":"c8e721a6-c549-4aa3-a940-0082bed7e0c5",
+        "state":"received",
+        "Lat":-32.03289,
+        "Lng":115.86833,
+        "positionTime":"2017-02-07T12:17:25",
+        "speed":"0.19",
+        "direct":"0.00"
+    };
+
+    showMsgNotification([payload]);
+});*/
 
 $$('body').on('click', '#menu li', function () {
     var id = $$(this).attr('id');
@@ -452,13 +454,13 @@ $$('body').on('click', '#menu li', function () {
         case 'menuRecharge':           
             recharge();
             break;
+        case 'menuProfile':           
+            profile();
+            break;
         case 'menuAlarms':           
             if ( typeof(activePage) == 'undefined' || (activePage && activePage.name != "alarms.assets")) {
                 checkBalanceAndLoadPage('alarms.assets'); 
             }
-            break;
-        case 'menuProfile':           
-            profile();
             break;
         case 'menuSupport':           
             if ( typeof(activePage) == 'undefined' || (activePage && activePage.name != "user.support")) {           
@@ -532,16 +534,15 @@ $$('.assets_list').on('click', '.item_asset', function(){
     if ((parseInt(asset.StatusNew) & 2) > 0) {        
         immobState = true; 
     }
-
-  	/*App.alert('hi');*/
     mainView.router.load({
         url:'resources/templates/asset.html',
         context:{
             Name: asset.Name,
             ImgSrc: assetImgSrc,
             IMEI: asset.IMEI,
-            /*Geolock: geolockState,    */
+            /*Geolock: geolockState,*/    
             Credits: userCredits,
+            rcFlag: localStorage.elem_rc_flag,
             Geolock: geolockState,    
             Immob: immobState,
         }
@@ -551,25 +552,20 @@ $$('.assets_list').on('click', '.item_asset', function(){
     
    
 
-/*App.onPageBeforeRemove('notification', function(page){
-	App.params.swipePanel = true;
-});*/
+
 
 App.onPageInit('notification', function(page){
-	//App.params.swipePanel = false;
     //console.log( );
     //clearNotificationList();
-    //App.alert('hi');
 	virtualNotificationList = App.virtualList('.notification_list', {    
         //List of array items
         items: [],
         height: 73,
         // Display the each item using Template7 template parameter
         renderItem: function (index, item) {
-            var ret = '';    
-            var time = null;    
-            //alert(JSON.stringify(item));   
-            if (typeof item == 'object' && item.alarm) { 
+            var ret = '';
+            var time = null;
+            if (typeof item == 'object' && item.alarm) {
                 switch (item.alarm){
                     case 'Status':
                         if (item.CreateDateTime) {
@@ -593,12 +589,12 @@ App.onPageInit('notification', function(page){
                                 '</li>';
                         break;               
                     default:
-                    	
-                    	if (item.PositionTime) {
-                    		time = item.PositionTime;
-                    	}else if (item.positionTime){
-                    		time = item.positionTime;
-                    	}
+                        
+                        if (item.PositionTime) {
+                            time = item.PositionTime;
+                        }else if (item.positionTime){
+                            time = item.positionTime;
+                        }
                         ret = '<li class="swipeout" data-id="'+item.listIndex+'" data-alarm="'+item.alarm+'" data-lat="'+item.Lat+'" data-lng="'+item.Lng+'" data-speed="'+item.Speed+'" data-direct="'+item.Direction+'" data-time="'+time+'" data-imei="'+item.Imei+'" data-name="'+item.AssetName+'" >' +                        
                                     '<div class="swipeout-content item-content">' +
                                         '<div class="item-inner">' +
@@ -619,8 +615,8 @@ App.onPageInit('notification', function(page){
         }
     });
 
-	var user = localStorage.ACCOUNT;
-    var notList = getNotificationList();
+	var user = localStorage["ACCOUNT"];
+    var notList = getNotificationList();                
     //console.log(notList[user]);
     showNotification(notList[user]); 
     getNewNotifications();
@@ -666,10 +662,10 @@ App.onPageInit('notification', function(page){
                 App.alert(LANGUAGE.PROMPT_MSG023);
             }
             
-        }         
+        }          
     });
-
 });
+
 
 
 
@@ -764,19 +760,16 @@ App.onPageInit('resetPwdNew', function(page) {
 });
 
 App.onPageInit('asset', function(page) {
-    //console.log(page);    
-    //alert('asset page loaded');
+    //console.log(page);  
     var assetList = getAssetList();
     var asset = assetList[TargetAsset.IMEI];
 
     $$('.upload_photo, .asset_img img').on('click', function () {        
         App.actions(cameraButtons);        
-    });
-
-    $$('.loadPageAssetEdit').on('click', function () {  
+    }); 
+    $$('.loadPageAssetEdit').on('click', function () {        
         assetList = getAssetList();
-        asset = assetList[TargetAsset.IMEI];      
-        
+        asset = assetList[TargetAsset.IMEI];
         var assetImgSrc = getAssetImgSrc(TargetAsset.IMEI);
 
         mainView.router.load({
@@ -793,12 +786,12 @@ App.onPageInit('asset', function(page) {
         });
     });
 
-    $$('.loadPageAssetAlarm').on('click', function () { 
-        checkBalanceAndLoadPage('asset.alarm');
+    $$('.loadPageAssetAlarm').on('click', function () {           
+       checkBalanceAndLoadPage('asset.alarm');
     });
 
     $$('.loadPageAssetPosition').on('click', function () {
-
+        
         var userInfo = getUserinfo();
         var timeZone = moment().utcOffset() / 60;
 
@@ -813,11 +806,10 @@ App.onPageInit('asset', function(page) {
                 console.log(result);  
                 App.hidePreloader();                  
                 if(result.length > 0 || result.ERROR == "ARREARS"){
-                    showNoCreditMessage();        
-                }else{                   
-                    
+                    showNoCreditMessage();   
+                }else{ 
                     App.addNotification({
-                        hold: 3000,
+                        hold: 3000,                       
                         message: LANGUAGE.COM_MSG03
                     });
                     balance();  
@@ -844,13 +836,14 @@ App.onPageInit('asset', function(page) {
         JSON1.request(url, function(result){ 
                 App.hidePreloader();                 
                 if(result.length > 0 || result.ERROR == "ARREARS"){                       
-                    showNoCreditMessage();        
-                }else{ 
+                  showNoCreditMessage();   
+                }else{                
+                   
                     App.addNotification({
                         hold: 3000,
                         message: LANGUAGE.COM_MSG03
-                    }); 
-                    balance();                   
+                    });
+                    balance();
                 }
                 
                 
@@ -879,7 +872,7 @@ App.onPageInit('asset', function(page) {
 
                 if (result.MajorCode == '000') {
                     if (result.MinorCode == '1006') {
-                        showNoCreditMessage();         
+                       showNoCreditMessage();   
                     }else{
                         App.addNotification({
                             hold: 3000,                       
@@ -890,21 +883,21 @@ App.onPageInit('asset', function(page) {
                         if (updateAsset) {
                             updateAssetList(updateAsset);  
                         }                        
-                        $$('.setGeolockState').toggleClass('disabled'); 
-                        balance();  
+                        $$('.setGeolockState').toggleClass('disabled');  
+                        balance(); 
                     }                         
                     
                     
                 }else if(result.MajorCode == '100' && result.MinorCode == '1006'){
-                    showNoCreditMessage();        
-                }else if(result.MajorCode == '200' && result.Data && result.Data.ERROR == 'NOT_SUPPORT'){
-                    showModalMessage(TargetAsset.IMEI, LANGUAGE.PROMPT_MSG053);
+                    showNoCreditMessage();   
+                }else if(result.ERROR == "ARREARS"){
+                    showNoCreditMessage();           
                 }else{
                     App.addNotification({
                         hold: 5000,                       
                         message: LANGUAGE.COM_MSG16
-                    });   
-                    balance();                 
+                    }); 
+                    balance();                   
                 }
                 
                 
@@ -915,7 +908,6 @@ App.onPageInit('asset', function(page) {
         );
 
     });
-    
     
 });
 
@@ -940,15 +932,15 @@ App.onPageInit('asset.edit', function (page) {
                 encodeURIComponent($$(page.container).find('input[name="Describe1"]').val()),
                 encodeURIComponent($$(page.container).find('input[name="Describe2"]').val()),
                 encodeURIComponent($$(page.container).find('input[name="Describe3"]').val()),
-                encodeURIComponent($$(page.container).find('input[name="Describe4"]').val())
+                encodeURIComponent($$(page.container).find('input[name="Describe4"]').val())         
             ); 
         
         JSON1.request(url, function(result){   
         console.log(result);             
-                if (result.MajorCode == '000') { 
+                if (result.MajorCode == '000') {
                     if (assetImg.src !== 'resources/images/svg_add_photo_general.svg') {
                         result.Data.AppPhoto = assetImg.src;
-                    } 
+                    }                        
                     updateAssetList(result.Data);
                     //setAssetImg(assetImg);
                     init_AssetList();                    
@@ -966,7 +958,7 @@ App.onPageInit('asset.edit', function (page) {
 });
 
 App.onPageInit('asset.add', function (page) {  
-    
+   
     $$('.upload_photo, .asset_img img').on('click', function () {        
         App.actions(cameraButtons);        
     }); 
@@ -982,24 +974,24 @@ App.onPageInit('asset.add', function (page) {
             Describe4: $$(page.container).find('input[name="Describe4"]').val() 
         };
         var assetImg = {
-            IMEI: asset.IMEI,
+            IMEI: asset['IMEI'],
             src: $$(page.container).find('img[name="photo"]').attr('src')
         };    
         var userInfo = getUserinfo();
         var url = API_URL.URL_ADD_ASSET.format(userInfo.MajorToken,
                 userInfo.MinorToken,
-                asset.IMEI,
-                asset.Name,
-                asset.Describe1,
-                asset.Describe2,
-                asset.Describe3,
-                asset.Describe4             
+                asset['IMEI'],
+                asset['Name'],
+                asset['Describe1'],
+                asset['Describe2'],
+                asset['Describe3'],
+                asset['Describe4']                
             ); 
         
         JSON1.request(url, function(result){ 
                 console.log(result);               
                 if (result.MajorCode == '000') {  
-                    asset.AppPhoto = assetImg.src;                           
+                    asset.AppPhoto = assetImg.src;                    
                     updateAssetList(asset);
                     //setAssetImg(assetImg);
                     init_AssetList();                    
@@ -1087,75 +1079,6 @@ App.onPageInit('asset.alarm', function (page) {
         
 });
 
-
-App.onPageInit('profile', function (page) {  
-    //var mobileToken = !localStorage["PUSH_MOBILE_TOKEN"]? '123' : localStorage["PUSH_MOBILE_TOKEN"];
-	//var deviceToken = !localStorage["PUSH_DEVICE_TOKEN"]? '123' : localStorage["PUSH_DEVICE_TOKEN"];
-	//App.alert('mobileToken: '+mobileToken+', deviceToken: '+deviceToken);
-    $$('.saveProfile').on('click', function(e){
-        var user = {
-            FirstName: $$(page.container).find('input[name="FirstName"]').val(),
-            SurName: $$(page.container).find('input[name="SurName"]').val(),
-            Mobile: $$(page.container).find('input[name="Mobile"]').val(),
-            Email: $$(page.container).find('input[name="Email"]').val(),
-            Address0: $$(page.container).find('input[name="Address0"]').val(),
-            Address1: $$(page.container).find('input[name="Address1"]').val(),
-            Address2: $$(page.container).find('input[name="Address2"]').val(),
-            Address3: $$(page.container).find('input[name="Address3"]').val(),
-            Address4: $$(page.container).find('input[name="Address4"]').val()
-        };
-
-        var userInfo = getUserinfo(); 
-        var url = API_URL.URL_EDIT_ACCOUNT.format(userInfo.MajorToken,
-                userInfo.MinorToken,
-                user.FirstName,
-                user.SurName,
-                user.Mobile,
-                user.Email,
-                user.Address0,
-                user.Address1,
-                user.Address2,
-                user.Address3,
-                user.Address4 
-            ); 
-
-        App.showPreloader();
-        JSON1.request(url, function(result){ 
-                console.log(userInfo);
-                console.log(user);
-                console.log(url);
-                console.log(result);                  
-                if (result.MajorCode == '000') {                    
-                    userInfo.UserInfo = {
-                        FirstName: user.FirstName,
-                        SurName: user.SurName,
-                        Mobile: user.Mobile,
-                        Email: user.Email,
-                        Address0: user.Address0,
-                        Address1: user.Address1,
-                        Address2: user.Address2,
-                        Address3: user.Address3,
-                        Address4: user.Address4,
-                        Expires: userInfo.UserInfo.Expires,
-                        SMSTimes: userInfo.UserInfo.SMSTimes,
-                        SecurityCode: userInfo.UserInfo.SecurityCode,
-                    };
-                   
-                    setUserinfo(userInfo);
-                    
-                    mainView.router.back();
-                }else if(result.MajorCode == '200'){
-                    App.alert(LANGUAGE.PROMPT_MSG014);
-                }else{
-                    App.alert(LANGUAGE.PROMPT_MSG014);
-                }
-                App.hidePreloader();
-            },
-            function(){ App.hidePreloader(); App.alert(LANGUAGE.COM_MSG02); }
-        ); 
-    });
-});
-
 App.onPageInit('alarms.assets', function (page) {
 
     var assetListContainer = $$(page.container).find('.alarmsAssetList');
@@ -1186,33 +1109,27 @@ App.onPageInit('alarms.assets', function (page) {
             return foundItems; 
         },   
         height: function (item) {
-            return 88;
+            return 44;
         },
         items: newAssetlist,
         renderItem: function (index, item) {
             var ret = '';
-            var assetImg = 'resources/images/svg_asset.svg';  
-            if (item.AppPhoto) {
-                assetImg = item.AppPhoto;  
-            } 
-            ret +=  '<li data-index="'+index+'" >';
-            ret +=      '<label class="label-checkbox item-content no-fastclick">';
-                if (item.Selected) {
+            //var assetImg = getAssetImg(item, {'assetList':true});              
+
+            ret +=  '<li data-index="'+index+'">';
+            ret +=      '<label class="label-checkbox item-content">';
+           // ret +=          '<input type="checkbox" name="alarms-assets" value="" data-imei="' + item.IMEI + '" data-id="' + item.Id + '">';
+            if (item.Selected) {
                     ret +=          '<input type="checkbox" name="alarms-assets" value="" data-imei="' + item.IMEI + '" checked="true" >';
                 }else{
                     ret +=          '<input type="checkbox" name="alarms-assets" value="" data-imei="' + item.IMEI + '" >';
                 }            
-            ret +=          '<div class="item-media"><img src="'+assetImg+'" alt="" /></div>';
+            ret +=          '<div class="item-media"><i class="icon icon-form-checkbox"></i></div>';
             ret +=          '<div class="item-inner">';
-            ret +=              '<div class="item-title-row">';
-            ret +=                  '<div class="item-title color-white">' + item.Name + '</div>';
-            ret +=                  '<div class="item-after">';
-            ret +=                      '<i class="icon icon-form-checkbox"></i>';
-            ret +=                  '</div>';
-            ret +=              '</div>';
+            ret +=              '<div class="item-title color-white">' + item.Name + '</div>';
             ret +=          '</div>';
             ret +=      '</label>';
-            ret +=  '</li>';            
+            ret +=  '</li>';
             
             return  ret;
         }
@@ -1224,14 +1141,10 @@ App.onPageInit('alarms.assets', function (page) {
         found: '.list-block-search-alarms-assets',
         notFound: '.searchbar-not-found-alarms-assets',
         onDisable: function(s){
-            $(s.container).slideUp();
+            //$(s.container).slideUp();
         }
     });
-
-    $$('.button_search_alarm_assets').on('click', function(){
-        $$('.searchbarAlarmsAssets').addClass('fadeInDown').show();     
-        $$('.searchbarAlarmsAssets input').focus();
-    });
+    
     
     var SelectAll = $$(page.container).find('input[name="select-all"]');
 
@@ -1360,6 +1273,72 @@ App.onPageInit('alarms.select', function (page) {
 
 });
 
+
+App.onPageInit('profile', function (page) {  
+    //var mobileToken = !localStorage["PUSH_MOBILE_TOKEN"]? '123' : localStorage["PUSH_MOBILE_TOKEN"];
+	//var deviceToken = !localStorage["PUSH_DEVICE_TOKEN"]? '123' : localStorage["PUSH_DEVICE_TOKEN"];
+	//App.alert('mobileToken: '+mobileToken+', deviceToken: '+deviceToken);
+    $$('.saveProfile').on('click', function(e){
+        var user = {
+            FirstName: $$(page.container).find('input[name="FirstName"]').val(),
+            SurName: $$(page.container).find('input[name="SurName"]').val(),
+            Mobile: $$(page.container).find('input[name="Mobile"]').val(),
+            Email: $$(page.container).find('input[name="Email"]').val(),
+            Address0: $$(page.container).find('input[name="Address0"]').val(),
+            Address1: $$(page.container).find('input[name="Address1"]').val(),
+            Address2: $$(page.container).find('input[name="Address2"]').val(),
+            Address3: $$(page.container).find('input[name="Address3"]').val(),
+            Address4: $$(page.container).find('input[name="Address4"]').val()
+        };
+
+        var userInfo = getUserinfo(); 
+        var url = API_URL.URL_EDIT_ACCOUNT.format(userInfo.MajorToken,
+                userInfo.MinorToken,
+                user['FirstName'],
+                user['SurName'],
+                user['Mobile'],
+                user['Email'],
+                user['Address0'],
+                user['Address1'],
+                user['Address2'],
+                user['Address3'],
+                user['Address4'] 
+            ); 
+
+        App.showPreloader();
+        JSON1.request(url, function(result){ 
+                console.log(result);                  
+                if (result.MajorCode == '000') {                    
+                    userInfo.UserInfo = {
+                        FirstName: user['FirstName'],
+                        SurName: user['SurName'],
+                        Mobile: user['Mobile'],
+                        Email: user['Email'],
+                        Address0: user['Address0'],
+                        Address1: user['Address1'],
+                        Address2: user['Address2'],
+                        Address3: user['Address3'],
+                        Address4: user['Address4'],
+                        Expires: userInfo.UserInfo.Expires,
+                        SMSTimes: userInfo.UserInfo.SMSTimes,
+                        SecurityCode: userInfo.UserInfo.SecurityCode,
+                    };
+                   
+                    setUserinfo(userInfo);
+                    
+                    mainView.router.back();
+                }else if(result.MajorCode == '200'){
+                    App.alert(LANGUAGE.PROMPT_MSG014);
+                }else{
+                    App.alert(LANGUAGE.PROMPT_MSG014);
+                }
+                App.hidePreloader();
+            },
+            function(){ App.hidePreloader(); App.alert(LANGUAGE.COM_MSG02); }
+        ); 
+    });
+});
+
 App.onPageInit('profile.newPwd', function (page) { 
     $$('.saveProfileNewPwd').on('click', function(e){    
         var password = {
@@ -1372,7 +1351,7 @@ App.onPageInit('profile.newPwd', function (page) {
                 var userInfo = getUserinfo(); 
                 var url = API_URL.URL_NEW_PASSWORD.format(userInfo.MinorToken,
                         encodeURIComponent(password.old),
-                        encodeURIComponent(password.new)                         
+                        encodeURIComponent(password.new)                            
                     ); 
                 //console.log(url);
                 App.showPreloader();
@@ -1569,7 +1548,7 @@ App.onPageInit('asset.edit.photo', function (page) {
     });
 });
 
-App.onPageInit('upgrade', function (page) {  
+/*App.onPageInit('upgrade', function (page) {  
     var upgradeButton = $$(page.container).find('.buttonUpgrade');
     
     upgradeButton.on('click', function(){
@@ -1591,7 +1570,7 @@ App.onPageInit('upgrade', function (page) {
             }else if(result.MajorCode == '101'){
                 console.log('here');
                 App.confirm(LANGUAGE.PROMPT_MSG008, function () {   
-                    var href = URL_REGISTRATION+'imei='+TargetAsset.IMEI+'&pn=3';  // pn - is a project number 3 means QuikProtect
+                    var href = URL_REGISTRATION+'imei='+TargetAsset.IMEI+'&pn=4';  // pn - is a project number 4 means BoatProtect
                     if (typeof navigator !== "undefined" && navigator.app) {
             navigator.app.loadUrl(href, {openExternal: true});             
         } else {
@@ -1613,7 +1592,7 @@ App.onPageInit('upgrade', function (page) {
         }); 
         
     });
-});
+});*/
 
 
 
@@ -1622,8 +1601,10 @@ function clearUserInfo(){
    
     var deviceToken = !localStorage.PUSH_DEVICE_TOKEN ? '' : localStorage.PUSH_DEVICE_TOKEN;
     var mobileToken = !localStorage.PUSH_MOBILE_TOKEN? '' : localStorage.PUSH_MOBILE_TOKEN;
-    var MinorToken = getUserinfo().MinorToken;    
+    var MinorToken = getUserinfo().MinorToken;
     var userName = !localStorage.ACCOUNT? '' : localStorage.ACCOUNT;     
+
+    var elem_rc_flag = !localStorage.elem_rc_flag ? '' : localStorage.elem_rc_flag; 
     
     var alarmList = getAlarmList();
     var assetImgList = getAssetImgList();
@@ -1632,10 +1613,6 @@ function clearUserInfo(){
 
     window.PosMarker = {};
     TargetAsset = {};
-    
-    if (virtualAssetList) {
-        virtualAssetList.deleteAllItems();
-    }
     
     localStorage.clear();
     
@@ -1651,17 +1628,27 @@ function clearUserInfo(){
     if (pushList) {
         localStorage.setItem("COM.QUIKTRAK.LIVE.NOTIFICATIONLIST", JSON.stringify(pushList));
     }
+   
+    if (virtualAssetList) {
+        virtualAssetList.deleteAllItems();
+    }
+    
     if (deviceToken) {
         localStorage.PUSH_DEVICE_TOKEN = deviceToken; 
     }    
     if (mobileToken) {
         localStorage.PUSH_MOBILE_TOKEN = mobileToken;
     }
+
+    if (elem_rc_flag) {
+        localStorage.elem_rc_flag = 1;
+    }
     
+
     JSON1.request(API_URL.URL_GET_LOGOUT.format(MinorToken, deviceToken, mobileToken), function(result){
                     console.log(result);                        
-    }); 
-    $$("input[name='account']").val(userName);
+    });         
+    $$("input[name='account']").val(userName); 
 }
 
 function logout(){ 
@@ -1699,14 +1686,14 @@ function reGetPushDetails(){
     }           
 }
 
-
 function login(){  
     //alert('inBrowser: '+inBrowser);  
     getPlusInfo();
+
     //hideKeyboard();
     //alert('login called');
     
-   // App.showPreloader();
+    //App.showPreloader();
     var mobileToken = !localStorage.PUSH_MOBILE_TOKEN ? '111' : localStorage.PUSH_MOBILE_TOKEN;
     var appKey = !localStorage.PUSH_APP_KEY ? '111' : localStorage.PUSH_APP_KEY;
     var deviceToken = !localStorage.PUSH_DEVICE_TOKEN ? '111' : localStorage.PUSH_DEVICE_TOKEN;
@@ -1718,13 +1705,16 @@ function login(){
                                      , encodeURIComponent(!password.val() ? localStorage.PASSWORD : password.val())
                                      , appKey
                                      , mobileToken
-                                     , encodeURIComponent(deviceToken)
+                                     , encodeURIComponent(deviceToken) 
                                      , deviceType);  
                           
     JSON1.request(urlLogin, function(result){
             App.hidePreloader();     
             console.log(result);      
             if(result.MajorCode == '000') {
+                if (result.Data.elemRc) {
+                    localStorage.elem_rc_flag = 1;
+                }
                 if(account.val()) {
                     localStorage.ACCOUNT = account.val();
                     localStorage.PASSWORD = password.val();
@@ -1735,11 +1725,11 @@ function login(){
                 setAssetList(result.Data.AssetArray);
                 updateUserCrefits(result.Data.UserInfo.SMSTimes);
 
-                /*if (parseInt(result.Data.UserInfo.SMSTimes) < 3) {
-                    setTimeout( function(){
-                        showMsgLowBalance(result.Data.UserInfo.SMSTimes);
-                    },5000);
-                }*/
+                
+                /*setTimeout( function(){
+                    checkIsBalanceLow(result.Data.UserInfo.SMSTimes);
+                },5000);*/
+               
                 
                 init_AssetList(); 
                 initSearchbar();  
@@ -1747,8 +1737,12 @@ function login(){
                 
                 getNewNotifications();
                 App.closeModal();
+
+                //console.log(localStorage['COM.QUIKTRAK.LIVE.GEOLOCKLIST']);
                 //alert(urlLogin);
-                //App.alert('mobileToken: '+mobileToken+', appKey: '+appKey+', deviceToken: '+deviceToken+', deviceType: '+deviceType);
+                //alert('mobileToken: '+mobileToken+', appKey: '+appKey+', deviceToken: '+deviceToken);
+
+
             }else {
                 App.alert(LANGUAGE.LOGIN_MSG01, function(){
                     //clearUserInfo();
@@ -1819,6 +1813,7 @@ function hideKeyboard() {
     document.activeElement.blur();
     $$("input").blur();
 }
+
 function init_AssetList() {
     var assetList = getAssetList(); 
     
@@ -1835,12 +1830,10 @@ function init_AssetList() {
     });
     
     returnToIndex();
-   
+    
     virtualAssetList.replaceAllItems(newAssetlist);
     
-    
-    //console.log(assetList);
-
+    initExtend();
     /*var mobileToken = !localStorage["PUSH_MOBILE_TOKEN"]? '123' : localStorage["PUSH_MOBILE_TOKEN"];
     var appKey = !localStorage["PUSH_APPID_ID"]? 'RpOT2oi37K69qGaSyxDtu8' : localStorage["PUSH_APPID_ID"];
     var deviceToken = !localStorage["PUSH_DEVICE_TOKEN"]? '123' : localStorage["PUSH_DEVICE_TOKEN"];
@@ -1899,7 +1892,6 @@ function recharge(){
     var button50  = 'QYHM382HALQBG';
     var button100 = '7GB5ZBQQU5RAY';
     var buttonCur = 'AUD';*/
-
     var button10  = 'XTKUPGEYWZ3T4';
     var button50  = 'KWC3YWFGZTW28';
     var button100 = 'QTULPNEWWN6CN';
@@ -1907,12 +1899,12 @@ function recharge(){
 
 
     switch (CountryCode){
-        /*case 'USA':
+        case 'USA':
             button10  = 'XTKUPGEYWZ3T4';
             button50  = 'KWC3YWFGZTW28';
             button100 = 'QTULPNEWWN6CN';
             buttonCur = 'USD';
-            break;*/
+            break;
         case 'CAN':
             button10  = 'FSMSLCFUPE954';
             button50  = 'GFBCR2TX9XEJL';
@@ -1925,7 +1917,7 @@ function recharge(){
         url: 'resources/templates/recharge.html',
         context:{
             userCode: MinorToken,
-            dealerNumber: 1,    // 1 - means TTC 
+            dealerNumber: 1,    // 1 - means TTC
             other: 'TTCProtect-app',
             button10: button10,
             button50: button50,
@@ -1936,11 +1928,11 @@ function recharge(){
     });           
 }
 
-function upgrade(planTime){
+/*function upgrade(planTime){
     var userInfo = getUserinfo();
-    var href = PAYPAL_URL.UPGRADELINK1 + '&on0=IMEI&os0=' + TargetAsset.IMEI + '&on1=MajorToken&os1=' + userInfo.MajorToken + '&on2=MinorToken&os2=' + userInfo.MinorToken + '&on3=ProjectNumber&os3=1';
+    var href = PAYPAL_URL.UPGRADELINK1 + '&on0=IMEI&os0=' + TargetAsset.IMEI + '&on1=MajorToken&os1=' + userInfo.MajorToken + '&on2=MinorToken&os2=' + userInfo.MinorToken;
     if (planTime == '2') {
-        href = PAYPAL_URL.UPGRADELINK2 + '&on0=IMEI&os0=' + TargetAsset.IMEI + '&on1=MajorToken&os1=' + userInfo.MajorToken + '&on2=MinorToken&os2=' + userInfo.MinorToken + '&on3=ProjectNumber&os3=1';
+        href = PAYPAL_URL.UPGRADELINK2 + '&on0=IMEI&os0=' + TargetAsset.IMEI + '&on1=MajorToken&os1=' + userInfo.MajorToken + '&on2=MinorToken&os2=' + userInfo.MinorToken;
     }
    
     if (typeof navigator !== "undefined" && navigator.app) {
@@ -1953,7 +1945,7 @@ function upgrade(planTime){
         App.alert(LANGUAGE.PROMPT_MSG013);
     }, 2000);
 
-}
+}*/
 
 function loadPositionPage(params){
 
@@ -2059,8 +2051,7 @@ function showMap(params){
     if (!StreetViewService) {
         StreetViewService = new google.maps.StreetViewService();
     }
-}
-
+} 
 function setAssetList(list){    
     //localStorage.setItem("COM.QUIKTRAK.LIVE.ASSETLIST", JSON.stringify(list));    
     var ary = {};    
@@ -2075,38 +2066,21 @@ function setAssetList(list){
             Describe2: list[i]["Describe2"],
             Describe3: list[i]["Describe3"],
             Describe4: list[i]["Describe4"],
-            Alias: list[i]["Alias"], 
+            Alias: list[i]["Alias"],
             StatusNew: list[i]["StatusNew"],
             AlarmOptions: list[i]["AlarmOptions"],
-            AppPhoto: getAssetIcoSrc(list[i]["IMEI"]),           
+            AppPhoto: getAssetIcoSrc(list[i]["IMEI"]),  
         };
-
     }   
-    //console.log(ary);
     localStorage.setItem("COM.QUIKTRAK.LIVE.ASSETLIST", JSON.stringify(ary));
 }
 function updateAssetList(asset){
     var list = getAssetList();
-    //var oldAssetData = list[asset.IMEI];
     list[asset.IMEI]=asset;
-    //list[asset.IMEI]["AppPhoto"]=oldAssetData.AppPhoto;
     localStorage.setItem("COM.QUIKTRAK.LIVE.ASSETLIST", JSON.stringify(list));
 }
 function getAssetList(){
     var ret = null;var str = localStorage.getItem("COM.QUIKTRAK.LIVE.ASSETLIST");if(str){ret = JSON.parse(str);}return ret;
-}
-
-function updateAlarmOptVal(alarmOptions) {
-    var IMEIList = alarmOptions.IMEI.split(','); 
-    var assetList = getAssetList();    
-   
-    if (IMEIList) {        
-        $.each(IMEIList, function(index, value){            
-            assetList[value].AlarmOptions = alarmOptions.options;           
-        });
-    }    
-   
-    localStorage.setItem("COM.QUIKTRAK.LIVE.ASSETLIST", JSON.stringify(assetList));
 }
 
 function setAlarmList(options){
@@ -2121,7 +2095,7 @@ function setAlarmList(options){
         Tilt: options.Tilt,
         Impact: options.Impact,
         Power: options.Power
-    };
+    }
     console.log(list);
     
     localStorage.setItem("COM.QUIKTRAK.LIVE.ALARMLIST", JSON.stringify(list));   
@@ -2138,7 +2112,7 @@ function setAssetImg(assetImg){
     list[assetImg.IMEI]={
         IMEI: assetImg.IMEI,
         src: assetImg.src
-    };
+    }
     localStorage.setItem("COM.QUIKTRAK.LIVE.ASSETIMGLIST", JSON.stringify(list)); 
 }
 function getAssetImgList() {
@@ -2150,7 +2124,6 @@ function getAssetImgSrc(asset) {
 function getAssetIcoSrc(asset) {
     var assetImgList = getAssetImgList(); var ret = 'resources/images/svg_asset.svg';if (assetImgList){var assetImg = assetImgList[asset]; if (assetImg) {ret = assetImg['src'];}}return ret;
 }
-
 function setGeolock(object){
     var list = getGeolockList();
     if (!list) {        
@@ -2164,6 +2137,19 @@ function setGeolock(object){
 }
 function getGeolockList(){
     var ret = null;var str = localStorage.getItem("COM.QUIKTRAK.LIVE.GEOLOCKLIST");if(str){ret = JSON.parse(str);}return ret;
+}
+
+function updateAlarmOptVal(alarmOptions) {
+    var IMEIList = alarmOptions.IMEI.split(','); 
+    var assetList = getAssetList();    
+   
+    if (IMEIList) {        
+        $.each(IMEIList, function(index, value){            
+            assetList[value].AlarmOptions = alarmOptions.options;           
+        });
+    }    
+   
+    localStorage.setItem("COM.QUIKTRAK.LIVE.ASSETLIST", JSON.stringify(assetList));
 }
 
 function checkBalanceAndLoadPage(pageName){
@@ -2219,28 +2205,11 @@ function showNoCreditMessage(){
     });             
 }
 
-function showModalMessage(header, body){
-    var modalTex = '<div class="color-red custom-modal-title">'+ header +'</div>' +
-                    '<div class="custom-modal-text">'+ body +'</div>';                            
-    App.modal({
-           title: '<img class="custom-modal-logo" src="resources/images/logo_dark.png" alt=""/>',
-            text: modalTex,                                
-         buttons: [
-            {
-                text: LANGUAGE.COM_MSG31
-            },
-            
-        ]
-    });          
-}
-
 function loadPageAssetAlarm(){
-        var assetList = getAssetList();
-        var asset = assetList[TargetAsset.IMEI];
-
-        var assetAlarmVal = assetList[TargetAsset.IMEI].AlarmOptions;       
-        
-        var alarms = {
+    var assetList = getAssetList();
+    var asset = assetList[TargetAsset.IMEI];
+    var assetAlarmVal = assetList[TargetAsset.IMEI].AlarmOptions;       
+    var alarms = {
             alarm: {
                 state: true,
                 //val: 0,
@@ -2301,7 +2270,7 @@ function loadPageAssetAlarm(){
                 AccOn: alarms.accOn.state,
             }
         });
-    }
+}
 
 function loadPageSupport(){
     var userInfo = getUserinfo().UserInfo;
@@ -2369,7 +2338,9 @@ function getNewNotifications(params){
                 if (params && params.ptr === true) {
                     App.pullToRefreshDone();
                 }
-             
+                if(window.plus) {
+                    plus.push.clear();
+                }
                 
                 console.log(result);                       
                 if (result.MajorCode == '000') {
@@ -2498,7 +2469,7 @@ function getStatusNewState(params){
 
 function removeNotificationListItem(index){
     var list = getNotificationList();
-    var user = localStorage.ACCOUNT;
+    var user = localStorage["ACCOUNT"];
     
     list[user].splice(index, 1);
     localStorage.setItem("COM.QUIKTRAK.LIVE.NOTIFICATIONLIST", JSON.stringify(list));
@@ -2521,6 +2492,7 @@ function removeAllNotifications(){
     localStorage.setItem("COM.QUIKTRAK.LIVE.NOTIFICATIONLIST", JSON.stringify(list));
     virtualNotificationList.deleteAllItems();   
 }
+
 function setNotificationList(list){ 
     var pushList = getNotificationList();    
     var user = localStorage.ACCOUNT;             
@@ -2612,8 +2584,8 @@ function getNotificationList(){
 }
 
 function clearNotificationList(){
-    var list = getNotificationList();
-    var user = localStorage.ACCOUNT;   
+    var list = getNotificationList()
+    var user = localStorage["ACCOUNT"];   
     if(list) {
         list[user] = [];
     }
@@ -2679,7 +2651,7 @@ function showNotification(list){
 
 function processClickOnPushNotification(msgJ){
     //console.log(msgJ);
-    if (Array.isArray(msgJ)) {
+    if (Array.isArray(msgJ)) {      
         var msg = null;
         if (msgJ[0].payload) {
             msg = isJsonString(msgJ[0].payload);
@@ -2694,21 +2666,21 @@ function processClickOnPushNotification(msgJ){
         }      
 
         var localTime = '';
-        if (msg.time) {
+        if (msg && msg.time) {
             localTime = moment.utc(msg.time).toDate();
             msg.time = moment(localTime).format(window.COM_TIMEFORMAT);                         
         }
-        if (msg.PositionTime) {
+        if (msg && msg.PositionTime) {
             localTime = moment.utc(msg.PositionTime).toDate();
             msg.PositionTime = moment(localTime).format(window.COM_TIMEFORMAT);                         
         }
-        if (msg.CreateDateTime) {
+        if (msg && msg.CreateDateTime) {
             localTime = moment.utc(msg.CreateDateTime).toDate();
             msg.CreateDateTime = moment(localTime).format(window.COM_TIMEFORMAT);                         
         }
 
         //console.log(msg);
-        if( msg.alarm == 'Status' || msg.alarm == 'status' ){            
+        if( msg && msg.alarm == 'Status' || msg.alarm == 'status' ){            
             loadStatusPage(msg);                               
         }else if (msg && parseFloat(msg.lat) && parseFloat(msg.lat) || msg && parseFloat(msg.Lat) && parseFloat(msg.Lat)) { 
             
@@ -2767,14 +2739,6 @@ function showMsgNotification(arrMsgJ){
     }     
 }
 
-function updateUserCrefits(credits){
-    $$('body .user_credits').html(credits);
-
-    setTimeout(function() {
-        checkIsBalanceLow(credits);
-    }, 1000);
-}
-
 function checkIsBalanceLow(val) {   
     if (val < 6 ) {
         var modalTex = '<div class="color-red custom-modal-title">'+ LANGUAGE.PROMPT_MSG025 +'</div>' +
@@ -2821,6 +2785,14 @@ function checkIsBalanceLow(val) {
     }    
 }
 
+function updateUserCrefits(credits){
+    $$('body .user_credits').html(credits);
+
+    setTimeout(function() {
+        checkIsBalanceLow(credits);
+    }, 1000);
+}
+
 function balance(){
     var userInfo = getUserinfo(); 
     var url = API_URL.URL_GET_BALANCE.format(userInfo.MajorToken, userInfo.MinorToken); 
@@ -2832,9 +2804,6 @@ function balance(){
                 setUserinfo(userInfo); 
                 //$$('body .user_credits').html(result.Data.SMSTimes);
                 updateUserCrefits(result.Data.SMSTimes);
-                /*if (parseInt(result.Data.SMSTimes) == 1 || parseInt(result.Data.SMSTimes) == 2) {           
-                    showMsgLowBalance(result.Data.SMSTimes);                    
-                }*/
             }
         },
         function(){ }
@@ -2851,7 +2820,7 @@ function afterRechergeCredits(){
                 userInfo.UserInfo.SMSTimes = result.Data.SMSTimes;  
                 setUserinfo(userInfo); 
                 //$$('body .user_credits').html(result.Data.SMSTimes);
-                updateUserCrefits(result.Data.SMSTimes);
+                checkIsBalanceLow(result.Data.SMSTimes);
                 var text = 'Your Remaining: '+result.Data.SMSTimes;
                 App.alert(text);
             }
@@ -2860,6 +2829,34 @@ function afterRechergeCredits(){
         function (){App.hidePreloader();App.alert('Network Error');}
     );
 }
+
+var elem_rc = '<li class="item-content list-panel-all close-panel item-link" id="menuRecharge" style="display:none;">' +
+                '<div class="item-media">' +
+                  '<i class="icon icon-recharge"></i>' +
+                '</div>' +
+                '<div class="item-inner">' +
+                  '<div class="item-title">'+LANGUAGE.MENU_MSG02+'</div>' +
+                '</div>' +
+              '</li>';
+$$(elem_rc).insertAfter('#menuAddAsset');
+
+var elem_remaining =    '<div class="menu_remaining" style="display:none;">' +
+                            '<div class="content-divider"></div>' +
+                            '<div class="content-block remaining_wrapper" >' +
+                              '<p>'+LANGUAGE.COM_MSG01+': <span class="user_credits">999</span></p>' +
+                            '</div>' +
+                        '</div>';
+$$(elem_remaining).insertAfter('#menu');
+
+function initExtend(){ 
+    if ($$("#menuRecharge").length != 0 && localStorage.elem_rc_flag) {
+        $$('body').find('#menuRecharge').css('display', 'flex');
+    }    
+    if ($$(".menu_remaining").length != 0 && localStorage.elem_rc_flag) {
+        $$('body').find('.menu_remaining').css('display', 'block');
+    }  
+}
+
 
 
 function initSearchbar(){    
@@ -2871,11 +2868,9 @@ function initSearchbar(){
         searchIn: '.item-title',
         found: '.searchbar-found',
         notFound: '.searchbar-not-found',
-        onDisable: function(s){
+        /*onDisable: function(s){
             $(s.container).slideUp();
-           // $$(s.container).removeClass('fadeInDown').addClass('fadeOutUp').hide();
-
-        }
+        }*/
     });
 }
 
@@ -2933,3 +2928,41 @@ function getImg(){
         }
     }
 }   
+
+
+
+function getImage(source){
+    
+    if (!navigator.camera) {
+        alert("Camera API not supported", "Error");
+        
+    }else{
+        var options = { quality: 50,
+                        destinationType: Camera.DestinationType.DATA_URL,
+                        sourceType: source,      // 0:Photo Library, 1=Camera, 2=Saved Album
+                        encodingType: 0     // 0=JPG 1=PNG
+                      };
+
+        navigator.camera.getPicture(
+            function(imgData) {
+              //$('.media-object', this.$el).attr('src', "data:image/jpeg;base64,"+imgData);
+                mainView.router.load({
+                    url: 'resources/templates/asset.edit.photo.html',
+                    context: {
+                        imgSrc: "data:image/jpeg;base64,"+imgData
+                        //imgSrc: base4
+                    }
+                });
+            
+            },
+            function() {
+                //alert('Error taking picture', 'Error');
+            },
+            options);
+    }
+           
+}
+
+
+
+
