@@ -1018,7 +1018,7 @@ App.onPageInit('asset.alarm', function (page) {
     var alarm = $$(page.container).find('input[name = "checkbox-alarm"]'); 
     var allCheckboxesLabel = $$(page.container).find('label.item-content');
     var allCheckboxes = allCheckboxesLabel.find('input');
-    var alarmFields = ['geolock','tilt','impact','power','input'];  
+    var alarmFields = ['geolock','tilt','impact','power','input','accOff','accOn'];   
     
 
     alarm.on('change', function(e) { 
@@ -1289,7 +1289,7 @@ App.onPageInit('alarms.select', function (page) {
     var allCheckboxesLabel = $$(page.container).find('label.item-content');
     var allCheckboxes = allCheckboxesLabel.find('input');
     var assets = $$(page.container).find('input[name="Assets"]').val();
-    var alarmFields = ['geolock','tilt','impact','power','input'];     
+    var alarmFields = ['geolock','tilt','impact','power','input','accOff','accOn'];   
 
     alarm.on('change', function(e) { 
         if( $$(this).prop('checked') ){
@@ -2264,6 +2264,14 @@ function loadPageAssetAlarm(){
             input: {
                 state: true,
                 val: 131072,
+            },
+            accOff: {
+                state: true,
+                val: 65536,
+            },
+            accOn: {
+                state: true,
+                val: 32768,
             }
         };      
 
@@ -2273,7 +2281,7 @@ function loadPageAssetAlarm(){
                     alarms[key].state = false;
                 }            
             });
-            if (assetAlarmVal == 148740) {
+            if (assetAlarmVal == 247044) {
                 alarms.alarm.state = false;
             }
             
@@ -2289,6 +2297,8 @@ function loadPageAssetAlarm(){
                 Impact: alarms.impact.state,                
                 Power: alarms.power.state,
                 Input: alarms.input.state,
+                AccOff: alarms.accOff.state,
+                AccOn: alarms.accOn.state,
             }
         });
     }
