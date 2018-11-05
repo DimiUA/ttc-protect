@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sino.ttcprotekt" version="1.1.7" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" android-versionCode="36" ios-CFBundleVersion="36">
+<widget id="com.sino.ttcprotekt" version="1.1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" android-versionCode="37" ios-CFBundleVersion="37">
     <name>TTC Protect</name>
     <description>
         TTC Protect is a world leading vehicle location system providing protection

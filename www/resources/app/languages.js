@@ -67,6 +67,8 @@ window.LanguagePackages= {
 		"PROMPT_MSG052": "App can't get phone details for push notifications. Please, logout and login again.",
 		"PROMPT_MSG053": "Device does not support this feature",
 
+		"PROMPT_MSG054": "Сommand sent, your device will reply shortly.",		
+
 		"LOGIN_MSG01": "The login(email) or password you entered is incorrect.",
 		"LOGIN_MSG02": "Login Name / Email",
 		"LOGIN_MSG03": "Password",
