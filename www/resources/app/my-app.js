@@ -56,6 +56,9 @@ if( navigator.userAgent.match(/Windows/i) ){
 document.addEventListener("deviceready", onDeviceReady, false ); 
 
 function onDeviceReady(){ 
+    if (cordova && cordova.InAppBrowser) {
+        window.open = cordova.InAppBrowser.open;
+    }
     //fix app images and text size
     if (window.MobileAccessibility) {
         window.MobileAccessibility.usePreferredTextZoom(false);    
@@ -288,7 +291,8 @@ API_URL.URL_GET_ADDR_BY_GEO1 = "http://map.quiktrak.co/reverse.php?format=json&l
 API_URL.URL_GET_ADDR_BY_GEO2 = "http://nominatim.openstreetmap.org/reverse?format=json&lat={0}&lon={1}&zoom=18&addressdetails=1";
 API_URL.URL_SUPPORT = "http://support.quiktrak.eu/?name={0}&loginName={1}&email={2}&phone={3}&s={4}";
 
-API_URL.URL_ROUTE = "https://www.google.com/maps/dir/?api=1&destination={0},{1}"; //&travelmode=walking
+//API_URL.URL_ROUTE = "https://www.google.com/maps/dir/?api=1&destination={0},{1}"; //&travelmode=walking
+API_URL.URL_ROUTE = "maps://maps.apple.com/maps?daddr={0},{1}"; // ios link
 API_URL.URL_REFRESH_TOKEN = API_DOMIAN3 + "User/RefreshToken";
 
 
@@ -374,11 +378,12 @@ $$('body').on('click', 'a.external', function(event) {
     event.preventDefault();
     var href = this.getAttribute('href');
     if (href) {
-        if (typeof navigator !== "undefined" && navigator.app) {
+        /*if (typeof navigator !== "undefined" && navigator.app) {
             navigator.app.loadUrl(href, {openExternal: true});             
         } else {
             window.open(href,'_blank');
-        }
+        }*/
+        window.open(encodeURI(href), '_blank', 'location=yes');
     }
     return false;
 });
@@ -423,12 +428,13 @@ $$('body').on('click', '.routeButton', function(){
             encodeURIComponent(lng)
             ); 
         
-        if (typeof navigator !== "undefined" && navigator.app) {
+        /*if (typeof navigator !== "undefined" && navigator.app) {
             //plus.runtime.openURL(href);  
             navigator.app.loadUrl(href, {openExternal: true});           
         } else {
             window.open(href,'_blank');
-        }
+        }*/
+        window.open(href, '_blank', 'location=yes');
     }
     
 });
@@ -2356,11 +2362,12 @@ function loadPageSupport(){
     //var href = API_URL.URL_SUPPORT;
     var href = API_URL.URL_SUPPORT.format(param.name,param.loginName,param.email,param.phone,param.service); 
     
-    if (typeof navigator !== "undefined" && navigator.app) {
+    /*if (typeof navigator !== "undefined" && navigator.app) {
             navigator.app.loadUrl(href, {openExternal: true});             
         } else {
             window.open(href,'_blank');
-        }
+        }*/
+    window.open(href, '_blank', 'location=yes');
 }
 
 function getNewNotifications(params){ 
