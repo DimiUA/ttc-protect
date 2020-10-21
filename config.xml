@@ -1,5 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sino.ttcprotekt" version="1.1.91" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" android-versionCode="41" ios-CFBundleVersion="41">
+<widget  
+	version="1.1.91"
+	android-versionCode="41"
+	ios-CFBundleVersion="41"
+	id="com.sino.ttcprotekt" 
+	xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:android="http://schemas.android.com/apk/res/android" defaultlocale="en-US" >
     <name>TTC Protect</name>
     <description>
         TTC Protect is a world leading vehicle location system providing protection
@@ -37,6 +42,7 @@
           <false/>
         </edit-config>   
     </platform>
+     <preference name="loadUrlTimeoutValue" value="700000" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="Orientation" value="portrait" />
     <preference name="android-minSdkVersion" value="22" />
@@ -70,6 +76,8 @@
     <plugin name="cordova-plugin-camera" source="npm" spec="4.0.3"  />
     <plugin name="phonegap-plugin-mobile-accessibility" source="npm" spec="~1.0.5"  />
     <plugin name="cordova-plugin-inappbrowser" source="npm" spec="4.0.0"  />
+    <plugin name="cordova-plugin-wkwebview-engine" spec="~1.2.1" />
+    <plugin name="cordova-plugin-wkwebview-file-xhr" spec="~2.1.4"/>
 
     <edit-config target="NSCameraUsageDescription" file="*-Info.plist" mode="merge">
             <string>You can take a photo of your asset using camera and upload it into the app</string>
