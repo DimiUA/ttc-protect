@@ -64,16 +64,44 @@
 	                		<div class="item-title">{{@global.LANGUAGE.ASSET_MSG08}}</div>
 	                		<div class="item-after">
 	                			<div class="row button_on_off_wrapper">
-	                				<a href="#" class="button button-fill col-50 setGeolockState {{#if Geolock}}disabled{{/if}}" data-state="on">{{@global.LANGUAGE.COM_MSG14}}</a>
-	                				<a href="#" class="button button-fill col-50 setGeolockState {{#if Geolock}}{{else}}disabled{{/if}}"" data-state="off">{{@global.LANGUAGE.COM_MSG15}}</a>
-	                				<!-- <a href="#" class="button button-fill col-50 setGeolockState " data-state="on">{{@global.LANGUAGE.COM_MSG14}}</a>
-	                					            					<a href="#" class="button button-fill col-50 setGeolockState " data-state="off">{{@global.LANGUAGE.COM_MSG15}}</a> -->
+									<a href="#" class="button button-fill col-50 setGeolockState {{#if Geolock}}disabled{{/if}}" data-state="on">{{@global.LANGUAGE.COM_MSG14}}</a>
+	            					<a href="#" class="button button-fill col-50 setGeolockState {{#unless Geolock}}disabled{{/unless}}" data-state="off">{{@global.LANGUAGE.COM_MSG15}}</a>
+	            					<!-- <a href="#" class="button button-fill col-50 setGeolockState " data-state="on">{{@global.LANGUAGE.COM_MSG14}}</a>
+	            					<a href="#" class="button button-fill col-50 setGeolockState " data-state="off">{{@global.LANGUAGE.COM_MSG15}}</a> -->
 	                			</div>
 	            			               			
 	            		    </div>
 	                	</div>
 	              	</div>
 	            </li>
+	            <li class="item-content">
+	              	<div class="item-media"><img src="resources/images/svg_immobilization.svg" alt=""></div>
+	              	<div class="item-inner">
+	              		<div class="item-title-row">
+	                		<div class="item-title">{{@global.LANGUAGE.ASSET_MSG09}}</div>
+	                		<div class="item-after">
+	                			<div class="row button_on_off_wrapper">
+	                				<a href="#" class="button button-fill col-50 setImmobState {{#if Immob}}disabled{{/if}}" data-state="on">{{@global.LANGUAGE.COM_MSG14}}</a>
+	                				<a href="#" class="button button-fill col-50 setImmobState {{#if Immob}}{{else}}disabled{{/if}}"" data-state="off">{{@global.LANGUAGE.COM_MSG15}}</a>	                				
+	                			</div>	            			               			
+	            		    </div>
+	                	</div>
+	              	</div>
+	            </li>
+	            <!-- <li class="item-content">
+	              	<div class="item-media"><img src="resources/images/svg_door.svg" alt=""></div>
+	              	<div class="item-inner">
+	              		<div class="item-title-row">
+	                		<div class="item-title">{{@global.LANGUAGE.ASSET_MSG10}}</div>
+	                		<div class="item-after">
+	                			<div class="row button_on_off_wrapper">
+	            									<a href="#" class="button button-fill col-50 setDoorState {{#if Doorlock}}disabled{{/if}}" data-state="lock">{{@global.LANGUAGE.COM_MSG14}}</a>
+	            					<a href="#" class="button button-fill col-50 setDoorState {{#unless Doorlock}}disabled{{/unless}}" data-state="unlock">{{@global.LANGUAGE.COM_MSG15}}</a>
+	                			</div>	            			               			
+	            		    </div>
+	                	</div>
+	              	</div>
+	            </li> -->
 	            <li class="item-content">
 	              	<div class="item-media"><img src="resources/images/svg_upgrade.svg" alt=""></div>
 	              	<div class="item-inner">
