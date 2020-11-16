@@ -91,10 +91,7 @@
     <edit-config target="NSPhotoLibraryAddUsageDescription" file="*-Info.plist" mode="merge">
         <string>Need photo library access to save pictures there</string>
     </edit-config>
-    <config-file platform="ios" target="*-Info.plist" parent="ITSAppUsesNonExemptEncryption">
-        <false/>
-    </config-file>
-
+    
 
     <platform name="android">
         <icon density="ldpi" src="www/res/icon/android/drawable-ldpi-icon.png" />

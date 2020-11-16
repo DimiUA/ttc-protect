@@ -9,23 +9,15 @@
     		          
     	</div>
   	</div>
-
   	<div class="page-content">
-		<!--<div class="content-block-title">{{@global.LANGUAGE.ALARM_MSG01}}</div>
-		<div class="content-block">
-			<p class="color-white">{{@global.LANGUAGE.PROMPT_MSG055}}</p>
-		</div>-->
-		<div class="content-block-title color-red showAlarmNotice" >{{@global.LANGUAGE.PROMPT_MSG056}}</div>
-
   		
   		<div class="list-block no-hairlines-between no-hairlines media-list alarm_list"> 
   				
   			<ul>
-  				
   				<li class="item-content alarm_title">	            	           		
 	           		<div class="item-inner">
 	            		<div class="item-title-row">
-	            	  		<div class="item-title color-white">{{@global.LANGUAGE.ALARM_MSG18}}</div>
+	            	  		<div class="item-title color-white">{{@global.LANGUAGE.ALARM_MSG01}}</div>
 	            	  		<div class="item-after">
 	            	  			<label class="label-switch no-fastclick ">
 		            	  			<input type="checkbox" name="checkbox-alarm" {{#if Alarm}}checked="checked"{{/if}}>
@@ -47,7 +39,7 @@
                             </div>
                         </div>
                     </label>
-                </li>     
+                </li>  
 	            <li >
 	            	<label class="label-checkbox item-content no-fastclick " >
 	            		<input type="checkbox" name="checkbox-geolock" value="1024" {{#if Geolock}}checked="checked"{{/if}}>
@@ -61,7 +53,19 @@
 	            	  	</div>
 	            	</label>
 	            </li>
-
+	            <li >
+	            	<label class="label-checkbox item-content no-fastclick " >
+	            		<input type="checkbox" name="checkbox-tilt" value="256" {{#if Tilt}}checked="checked"{{/if}}>
+	            		<div class="item-inner">
+	            	  		<div class="item-title-row">
+	            	  	  		<div class="item-title color-white">{{@global.LANGUAGE.ALARM_MSG06}}</div>
+	            	  	  		<div class="item-after">
+	            	    			<i class="icon icon-form-checkbox"></i>
+	            	    		</div>
+	            	  	  	</div>
+	            	  	</div>
+	            	</label>
+	            </li>
 	            <li >
                     <label class="label-checkbox item-content no-fastclick " >
                         <input type="checkbox" name="checkbox-accOff" value="65536" {{#if AccOff}}checked="checked"{{/if}}>
@@ -88,7 +92,6 @@
                         </div>
                     </label>
                 </li>
-
 	            <li >
 	            	<label class="label-checkbox item-content no-fastclick " >
 	            		<input type="checkbox" name="checkbox-impact" value="16384" {{#if Impact}}checked="checked"{{/if}}>
@@ -115,19 +118,7 @@
 	            	  	</div>
 	            	</label>
 	            </li>
-				<!--<li >
-					<label class="label-checkbox item-content no-fastclick " >
-						<input type="checkbox"  name="checkbox-negativeInput" value="131072" {{#if NegativeInput}}checked="checked"{{/if}}>
-						<div class="item-inner">
-							<div class="item-title-row">
-								<div class="item-title color-white">{{@global.LANGUAGE.ALARM_MSG11}}</div>
-								<div class="item-after">
-									<i class="icon icon-form-checkbox"></i>
-								</div>
-							</div>
-						</div>
-					</label>
-				</li>-->
+	               
 	            <li >
 	            	<label class="label-checkbox item-content no-fastclick " >
 	            		<input type="checkbox"  name="checkbox-power" value="4" {{#if Power}}checked="checked"{{/if}}>
@@ -141,20 +132,7 @@
 	            	  	</div>
 	            	</label>
 	            </li>
-				<li >
-					<label class="label-checkbox item-content no-fastclick " >
-						<input type="checkbox" name="checkbox-tilt" value="256" {{#if Tilt}}checked="checked"{{/if}}>
-						<div class="item-inner">
-							<div class="item-title-row">
-								<div class="item-title color-white">{{@global.LANGUAGE.ALARM_MSG06}}</div>
-								<div class="item-after">
-									<i class="icon icon-form-checkbox"></i>
-								</div>
-							</div>
-						</div>
-					</label>
-				</li>
-
+	            
 	        </ul>
 	        
   		</div>

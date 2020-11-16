@@ -4,31 +4,26 @@ JSON1.request=function(url,success,error){if(url.indexOf("&callback=?")<0){if(ur
 JSON1.jsonp=function(url,funcCallback){window.parseLocation=function(results){var response=$.parseJSON(results);document.body.removeChild(document.getElementById('getJsonP'));delete window.parseLocation;if(funcCallback){funcCallback(response)}};function getJsonP(url){url=url+'&callback=parseLocation';var script=document.createElement('script');script.id='getJsonP';script.src=url;script.async=true;document.body.appendChild(script)}if(XMLHttpRequest){var xhr=new XMLHttpRequest();if('withCredentials'in xhr){var xhr=new XMLHttpRequest();xhr.onreadystatechange=function(){if(xhr.readyState==4){if(xhr.status==200){var response=$.parseJSON(xhr.responseText);if(funcCallback){funcCallback(response)}}else if(xhr.status==0||xhr.status==400){getJsonP(url)}else{}}};xhr.open('GET',url,true);xhr.send()}else if(XDomainRequest){var xdr=new XDomainRequest();xdr.onerror=function(err){};xdr.onload=function(){var response=JSON.parse(xdr.responseText);if(funcCallback){funcCallback(response)}};xdr.open('GET',url);xdr.send()}else{getJsonP(url)}}};
 JSON1.requestPost=function(url,data,success,error){$.ajax({async:true,url:url,data:data,type:"POST",dataType:"json",success:function(result){if(typeof(success)=='function'){success(typeof(result)=='string'?eval(result):result)}},error:function(){if(typeof(error)=='function'){error()}}})};
 var EARTH_RADIUS = 6378137.0; //单位M
-var PI = Math.PI; 
-function getRad(d){ 
-return d*PI/180.0; 
-} 
+var PI = Math.PI;
+function getRad(d){
+return d*PI/180.0;
+}
 
 Helper ={
     MarkerIcon: [
         L.icon({
-            iconUrl: 'resources/images/marker.svg',                       
-            iconSize:     [60, 60], // size of the icon                        
-            iconAnchor:   [17, 55], // point of the icon which will correspond to marker's location                        
+            iconUrl: 'resources/images/marker.svg',
+            iconSize:     [60, 60], // size of the icon
+            iconAnchor:   [17, 55], // point of the icon which will correspond to marker's location
             popupAnchor:  [0, -60] // point from which the popup should open relative to the iconAnchor
         }),
         L.icon({
-            iconUrl: 'resources/images/marker2.svg',                       
-            iconSize:     [60, 60], // size of the icon                        
-            iconAnchor:   [17, 55], // point of the icon which will correspond to marker's location                        
+            iconUrl: 'resources/images/marker2.svg',
+            iconSize:     [60, 60], // size of the icon
+            iconAnchor:   [17, 55], // point of the icon which will correspond to marker's location
             popupAnchor:  [0, -60] // point from which the popup should open relative to the iconAnchor
         })
     ],
-    StatusNewEnum:{
-        "geolock" : 1,
-        "immob": 2,
-        "doorlock": 4,
-    },
     getDirectionCardinal: function(direction){
             var ret = "";
             direction = parseFloat(direction);
@@ -105,31 +100,30 @@ Helper ={
         }
         return ret;
     },
-
     getAddressByGeocoder: function(latlng,replyFunc){
         var url = "https://nominatim.sinopacific.com.ua/reverse.php?format=json&lat={0}&lon={1}&zoom=18&addressdetails=1".format(latlng.lat, latlng.lng);
         var coords = latlng.lat + ', '+ latlng.lng;
-        JSON1.jsonp(url, function(result){ 
-            if (result.display_name) { replyFunc(result.display_name); }else{ replyFunc(coords); }            
+        JSON1.jsonp(url, function(result){
+            if (result.display_name) { replyFunc(result.display_name); }else{ replyFunc(coords); }
         },function(){
             url = "https://nominatim.openstreetmap.org/reverse?format=json&lat={0}&lon={1}&zoom=18&addressdetails=1".format(latlng.lat, latlng.lng);
-            JSON1.jsonp(url, function(result2){ 
-                if (result2.display_name) { replyFunc(result2.display_name); }else{ replyFunc(coords); }      
+            JSON1.jsonp(url, function(result2){
+                if (result2.display_name) { replyFunc(result2.display_name); }else{ replyFunc(coords); }
             },function(){
                 replyFunc(coords);
-            });       
-        });        
-       
+            });
+        });
+
     },
     getLatLngByGeocoder: function(address,replyFunc){
         var url = "https://nominatim.openstreetmap.org/search?q={0}&format=json&polygon=1&addressdetails=1".format(address);
         var res = null;
-        JSON1.jsonp(url, function(result){ 
+        JSON1.jsonp(url, function(result){
             res = new L.LatLng(result[0].lat, result[0].lon);
             replyFunc(res);
         },function(){
             url = "https://nominatim.sinopacific.com.ua/?q={0}&format=json&polygon=1&addressdetails=1".format(address);
-            JSON1.jsonp(url, function(result2){ 
+            JSON1.jsonp(url, function(result2){
                 res = new L.LatLng(result2[0].lat, result2[0].lon);
                 replyFunc(res);
             },function(){
@@ -137,27 +131,27 @@ Helper ={
             });
         });
     },
-    
+
    createMap: function(option){
-        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { name: 'osm', attribution: '' });            
-        var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { name: 'osm', attribution: '' });
+        var googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
             maxZoom: 22,
             subdomains:['mt0','mt1','mt2','mt3']
-        });           
-        var googleSatelitte = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+        });
+        var googleSatelitte = L.tileLayer('https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
             maxZoom: 20,
             subdomains:['mt0','mt1','mt2','mt3']
-        });              
-            
-        var map = L.map(option.target, { zoomControl: false, center: option.latLng, zoom: option.zoom, layers: [googleStreets] }); 
-                        
+        });
+
+        var map = L.map(option.target, { zoomControl: false, center: option.latLng, zoom: option.zoom, layers: [googleStreets] });
+
         var layers = {
             "<span class='mapSwitcherWrapper googleSwitcherWrapper'><img class='layer-icon' src='resources/images/googleRoad.png' alt='' /> <p>Map</p></span>": googleStreets,
             "<span class='mapSwitcherWrapper satelliteSwitcherWrapper'><img class='layer-icon' src='resources/images/googleSatellite.png' alt='' />  <p>Satellite</p></span>": googleSatelitte,
             "<span class='mapSwitcherWrapper openstreetSwitcherWrapper'><img class='layer-icon' src='resources/images/openStreet.png' alt='' /> <p>OpenStreet</p></span>": osm,
         };
 
-        L.control.layers(layers).addTo(map);            
+        L.control.layers(layers).addTo(map);
 
         return map;
     },
@@ -183,30 +177,30 @@ Helper ={
          var f = getRad((lat1 + lat2)/2);
         var g = getRad((lat1 - lat2)/2);
         var l = getRad((lng1 - lng2)/2);
-        
+
          var sg = Math.sin(g);
          var sl = Math.sin(l);
          var sf = Math.sin(f);
-         
+
          var s,c,w,r,d,h1,h2;
          var a = EARTH_RADIUS;
          var fl = 1/298.257;
-        
+
          sg = sg*sg;
          sl = sl*sl;
          sf = sf*sf;
-         
+
          s = sg*(1-sl) + (1-sf)*sl;
          c = (1-sg)*(1-sl) + sf*sl;
-         
+
          w = Math.atan(Math.sqrt(s/c));
         r = Math.sqrt(s*c)/w;
         d = 2*w*a;
          h1 = (3*r -1)/2/c;
          h2 = (3*r +1)/2/s;
-         
+
          return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
    },
    currentCreateLayer:null,
-   drawnItems:null   
+   drawnItems:null
 };

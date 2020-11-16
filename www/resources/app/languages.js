@@ -67,12 +67,7 @@ window.LanguagePackages= {
 		"PROMPT_MSG052": "App can't get phone details for push notifications. Please, logout and login again.",
 		"PROMPT_MSG053": "Device does not support this feature",
 
-		"PROMPT_MSG054": "Сommand sent, your device will reply shortly.",
-		"PROMPT_MSG055": "Alarm activation and notifications utilise credits. Ignition On and Off alarms may drain credits rapidly",
-		"PROMPT_MSG056": "Important alarm notice",
-		"PROMPT_MSG057": "Сommand not sent",
-		"PROMPT_MSG058": "Unknown command",
-		"PROMPT_MSG059": "Asset(s) not fitted with SIM",
+		"PROMPT_MSG054": "Сommand sent, your device will reply shortly.",		
 
 		"LOGIN_MSG01": "The login(email) or password you entered is incorrect.",
 		"LOGIN_MSG02": "Login Name / Email",
@@ -112,8 +107,7 @@ window.LanguagePackages= {
 		"ASSET_MSG06": "Show",
 		"ASSET_MSG07": "Upgrade",
 		"ASSET_MSG08": "Geolock",
-		"ASSET_MSG09": "Immobilization",
-		"ASSET_MSG10": "Lock Door",				
+		"ASSET_MSG09": "Immobilization",				
 
 		"STATUS_MSG00": 'Status',
 		"STATUS_MSG01": 'IMEI',
@@ -152,10 +146,8 @@ window.LanguagePackages= {
 		"ALARM_MSG08": "Power Disconnection",
 		"ALARM_MSG09": "Alarm Input",
 		"ALARM_MSG10": "Ignition Off",
-		"ALARM_MSG11": "Negative Input",
 		
 		"ALARM_MSG17": "Low Battery",
-		"ALARM_MSG18": "Toggle All",
 
 		"ADD_EDIT_MSG00": "Information",
 		"ADD_EDIT_MSG01": "Asset Name",		

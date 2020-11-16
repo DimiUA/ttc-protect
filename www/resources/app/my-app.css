@@ -30,6 +30,7 @@ body.with-panel-left-reveal .panel-overlay{
 .fs-32{
 	font-size: 32px !important;
 }
+
 .button{
 	padding: 0 48px;
     font-size: 20px;
@@ -49,10 +50,10 @@ body.with-panel-left-reveal .panel-overlay{
 }
 
 .bg-color-page{
-	background-color: #435964;
+	background-color: #333333;
 }
 .title-color{
-	color: #22333A;
+	color: #ff9800;
 }
 
 .content-block-title{
@@ -145,7 +146,13 @@ body.with-panel-left-reveal .panel-overlay{
 				background-color: transparent;
 			}
 
-
+			.menu .item-content.active{
+				background: rgba(0,0,0,0.1);
+			}
+			.menu .item-content.active .item-title{
+				color: #ff9800;
+			}
+	
 .remaining_wrapper{
 	margin: 12px 0;
 	text-align: center;
@@ -195,17 +202,8 @@ body.with-panel-left-reveal .panel-overlay{
 				font-size: 20px;
 				color: #fff;
 			}
-			.assets_list.list-block.media-list .item-link .item-title-row .item-title
-			{
+			.assets_list.list-block.media-list .item-link .item-title-row .item-title{
 				padding: 12px 0;
-			}
-			.alarmsAssetList .item-title-row,
-			.list-block-selectall .item-title{
-			    padding: 18px 0;
-			    font-size: 20px;
-			}
-			.alarmsAssetList .item-title-row .item-after{
-				    padding: 6px 0;
 			}
 			.assets_list.list-block.media-list .item-link .item-subtitle{
 				color: #A8A8A8;
@@ -214,13 +212,24 @@ body.with-panel-left-reveal .panel-overlay{
 			.assets_list.list-block.media-list .item-link .item-subtitle.online{
 				color: #00A0D3;
 			}
-			.assets_list .item-media img,
-			.alarmsAssetList .item-media img{
+			.assets_list .item-media img{
 				width: 60px;
 				border-radius: 50%;
-				
-
+				//box-shadow: inset 0px 0px 5px 2px rgba(0, 0, 0, 0.2);
 			}
+
+.list-block-selectall .item-title,
+.alarmsAssetList .item-title-row{
+	padding: 18px 0;
+	font-size: 20px;
+}
+.alarmsAssetList .item-title-row .item-after{
+	 padding: 6px 0;
+}
+.alarmsAssetList .item-media img{
+	width: 60px;
+	border-radius: 50%;
+}
 .list-block-selectall {
     list-style-type: none;
     margin: 0;
@@ -228,6 +237,7 @@ body.with-panel-left-reveal .panel-overlay{
 .alarmsAssetList {
     margin: 0;
 }
+
 
 .notification_button i{
 	position: relative;
@@ -253,14 +263,13 @@ body.with-panel-left-reveal .panel-overlay{
     	right: 0;
 	}
 
-
 /* PROFILE */
 
 .theme-white.tabbar a.tab-link{
 	color: #000;
 }
 .theme-white.tabbar a.tab-link.active{
-	color: #03a9f4;
+	color: #ff9800;
 }
 
 a.tab-link.active:after {
@@ -268,7 +277,7 @@ a.tab-link.active:after {
     content: '';
     width: 100%;
     height: 3px;
-    background: rgba(3,169,244,1);
+    background: #ff9800;
     position: absolute;
 }
 
@@ -458,6 +467,11 @@ a.tab-link.active:after {
 .status_page{
 
 }
+.popover-status{
+	padding: 0 8px;
+	width: auto;
+    max-width: 272px;
+}
 	.status_page_svg_status{
 		width: 80px;
 	}
@@ -488,16 +502,12 @@ a.tab-link.active:after {
 					padding-right: 0;
 				}
 					.status_list .item-title{
-						color: #C1272D;
+						color: #ff9800;
 					}
 					.status_list .item-after{
 						color: #333333;
 					}
-.popover-status{
-	padding: 0 8px;
-	width: auto;
-    max-width: 272px;
-}
+
 /* ADD EDIT ASSET*/
 .add_edit_page{
 
@@ -514,7 +524,6 @@ a.tab-link.active:after {
     	margin-right: -100px;
     	color: #fff;
 	}
-
 
 /* STREET VIEW */
 .pano_map{
@@ -548,7 +557,6 @@ a.tab-link.active:after {
 			height: 100%;
 
 		}
-
 		.float_button_wrapper{
     		position: absolute;
 		    
@@ -627,16 +635,16 @@ a.tab-link.active:after {
 	}
 		.position_bottom img{
 			width: 48px;
-			/* margin-bottom: 4px; */
+			margin-bottom: 4px;
 		}
 		.position_bottom p{
 			margin: 0;
 			font-size: 16px;
-			
+			/* color: #fff; */
 		}
 		.position_bottom p.position_data{
 			font-size: 12px;
-			
+			/* color: #00A0D3; */
 		}
 		.position_data{
 			color: #00A0D3;
@@ -680,9 +688,9 @@ a.tab-link.active:after {
 		    -webkit-transform-origin: 50% 0;
 		    transform-origin: 50% 0;
 		}
+		
 
-
-	.leaflet-control-layers:not(.leaflet-control-layers-expanded){
+		.leaflet-control-layers:not(.leaflet-control-layers-expanded){
 		border-radius: 50%;
 	}
 	.leaflet-popup-content-wrapper{
@@ -738,8 +746,6 @@ a.tab-link.active:after {
 			.leaflet-control-layers-base input[type=radio]:checked + span{
 				color: #000;
 			}
-
-
 /* UPGRADE */
 .upgrade_page{
 
@@ -944,7 +950,7 @@ a.tab-link.active:after {
 			}
 
 			.alarm_title .item-title{
-				font-size: 20px;
+				font-size: 24px;
 			}
 
 
@@ -975,9 +981,9 @@ a.tab-link.active:after {
 /* LOW CREDIT BALANCE MODAL */
 .custom-modal-logo{
 	max-width: 160px;
-    max-height: 70px;
+    /* max-height: 70px;
     width: 100%;
-    height: 100%;
+    height: 100%; */
 }
 .custom-modal-title{
 	text-transform: uppercase;
@@ -1000,6 +1006,7 @@ a.tab-link.active:after {
 			text-transform: uppercase;
 			margin: 10px 0 0 0;
 		}	
+
 
 /*
 ==============================================
